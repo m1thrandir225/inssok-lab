@@ -1,5 +1,5 @@
 <?php
-require_once  'db_connect.php';
+require_once 'db_connect.php';
 
 $instance = Database::getInstance();
 
@@ -17,7 +17,7 @@ if (!$result) {
     </head>
     <body>
         <div>
-            <a href="/create_expense_view.php"> Add Expense </a>
+            <a href="/views/create_expense_view.php"> Add Expense </a>
         </div>
         <table>
             <thead>
@@ -39,7 +39,7 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($row['date']) ?></td>
                             <td><?php echo htmlspecialchars($row['paymentMethod']) ?></td>
                             <td>
-                                <form action="delete_expense.php" method="post" style="display:inline">
+                                <form action="../delete_expense.php" method="post" style="display:inline">
                                     <input type="hidden" name="id" value="<?php echo $row['id']?>" />
                                     <button type="submit">Delete</button>
                                 </form>

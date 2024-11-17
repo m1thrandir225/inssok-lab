@@ -5,7 +5,7 @@
     <title> Create Expense </title>
 </head>
 <body>
-        <form action="create_expense.php" method="post">
+        <form action="../create_expense.php" method="post">
                 <div>
                     <label for="name"> Name: </label>
                     <input type="text" name="name" />

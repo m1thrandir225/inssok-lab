@@ -1,5 +1,5 @@
 <?php
-require_once  'db_connect.php';
+require_once 'db_connect.php';
 
 $instance = Database::getInstance();
 
@@ -18,7 +18,7 @@ if (!$result) {
 <body>
 <?php if ($result) : ?>
     <?php while ($row = $result->fetchArray(SQLITE3_ASSOC)) : ?>
-        <form action="update_expense.php" method="post">
+        <form action="../update_expense.php" method="post">
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
             <?php foreach($row as $key => $value) : ?>
                 <?php if($key == 'id') : continue; endif; ?>
