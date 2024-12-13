@@ -13,8 +13,14 @@ class TransactionController extends Controller
     public function index()
     {
         //
-        $transactions = Transaction::paginate(10);
-        return view('transactions.index', compact('transactions'));
+        $transactions = Transaction::all();
+        $count = $transactions->count();
+        $total_sum = 0;
+        foreach ($transactions as $transaction) {
+            $total_sum += $transaction->amount;
+        }
+
+        return view('transactions.index', compact('transactions', 'count', 'total_sum'));
     }
 
     /**

@@ -11,6 +11,8 @@
                 <th class="px-4 py-3 text-left">Employee Name</th>
                 <th class="px-4 py-3 text-left">Sender Name</th>
                 <th class="px-4 py-3 text-left">Amount</th>
+                <th class="px-4 py-3 text-left">Sender no.</th>
+                <th class="px-4 py-3 text-left">Receive no.</th>
                 <th class="px-4 py-3 text-right">Actions</th>
             </tr>
             </thead>
@@ -21,6 +23,8 @@
                     <td class="px-4 py-3">{{ $transaction->employee_name }}</td>
                     <td class="px-4 py-3">{{ $transaction->sender_name }}</td>
                     <td class="px-4 py-3">${{ number_format($transaction->amount, 2) }}</td>
+                    <td class="px-4 py-3">{{ $transaction->sender_transaction_number }}</td>
+                    <td class="px-4 py-3">{{ $transaction->receiver_transaction_number }}</td>
                     <td class="px-4 py-3 text-right">
                         <a href="{{ route('transactions.show', $transaction) }}" class="text-blue-500 hover:text-blue-700 mr-2">View</a>
                         <a href="{{ route('transactions.edit', $transaction) }}" class="text-green-500 hover:text-green-700 mr-2">Edit</a>
@@ -32,9 +36,12 @@
                     </td>
                 </tr>
             @endforeach
+
             </tbody>
         </table>
+        <div class="p-2 flex flex-col items-start justify-start">
+            <p class="text-blue-400 font-sans font-medium"> Number of transactions: {{$count}}</p>
+            <p class="text-green-400 font-sans font-medium"> Total sum: {{$total_sum}}$</p>
+        </div>
     </div>
-
-    {{ $transactions->links() }}
 @endsection
