@@ -2,28 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Post;
+use App\Repositories\Interface\CategoryRepositoryInterface;
+use App\Repositories\Interface\PostRepositoryInterface;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+    protected $postRepository;
+    protected $categoryRepository;
+
+    public function __construct(
+        PostRepositoryInterface $postRepository,
+        CategoryRepositoryInterface $categoryRepository
+    ) {
+        $this->postRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         //
-        $posts = Post::query()
-            ->with('category')
-            ->when(
-                $request->get('category_id') !== null,
-                fn ($query) => $query->where('category_id', $request->get('category_id'))
-            )
-            ->latest()
-            ->paginate(100);
+        $posts = $request->get('category_id')
+            ? $this->postRepository->findByCategory($request->get('category_id'), 100)
+            : $this->postRepository->paginate(100);
 
-        $categories = Category::all();
+        $categories = $this->categoryRepository->all();
 
         return view('posts.index', compact('posts', 'categories'));
     }
@@ -34,7 +41,7 @@ class PostController extends Controller
     public function create()
     {
         //
-        $categories = Category::all();
+        $categories = $this->categoryRepository->all();
         return view('posts.create', compact('categories'));
     }
 
@@ -49,7 +56,8 @@ class PostController extends Controller
             'body' => 'required|string|min:50|max:2000',
             'category_id' => 'required|integer|exists:categories,id',
         ]);
-        Post::query()->create($validated);
+
+        $this->postRepository->create($validated);
 
         return redirect()->route('posts.index');
     }
@@ -69,7 +77,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
-        $categories = Category::all();
+        $categories = $this->categoryRepository->all();
         return view('posts.edit', compact('post', 'categories'));
     }
 
@@ -85,7 +93,7 @@ class PostController extends Controller
             'category_id' => 'required|integer|exists:categories,id',
         ]);
 
-        $post->update($validated);
+        $this->postRepository->update($post, $validated);
 
         return redirect()->route('posts.show', $post);
     }
@@ -96,7 +104,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
-        $post->delete();
+        $this->postRepository->delete($post);
         return redirect()->route('posts.index');
     }
 }

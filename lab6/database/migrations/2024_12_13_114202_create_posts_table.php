@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('body');
             $table->foreignId("category_id")->constrained()->onDelete("cascade");
+            $table->softDeletes();
 
         });
     }

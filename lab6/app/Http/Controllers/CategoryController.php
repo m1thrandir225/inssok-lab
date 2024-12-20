@@ -4,21 +4,26 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Category;
+use App\Repositories\Interface\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
+
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepository){
+        $this->categoryRepository = $categoryRepository;
+
+    }
     public function index(Request $request)
     {
         //
-        $categories = Category::query()
-            ->when($request->has('search'),
-                fn ($query) => $query->where('name', 'like', '%'.$request->get('search').'%'))
-            ->latest()
-            ->paginate(100);
-
+        $categories = $request->has('search')
+            ? $this->categoryRepository->search($request->get('search'))
+            : $this->categoryRepository->paginate(100);
 
         return view('categories.index', compact('categories'));
 
@@ -43,7 +48,7 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $category = Category::create($validated);
+        $this->categoryRepository->create($validated);
 
         return redirect()->route('categories.index');
     }
@@ -75,8 +80,11 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
-        $category->update($validated);
+
+        $this->categoryRepository->update($category, $validated);
+
         return redirect()->route('categories.index');
+
     }
 
     /**
@@ -85,7 +93,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         //
-        $category->delete();
+        $this->categoryRepository->delete($category);
         return redirect()->route('categories.index');
     }
 }
