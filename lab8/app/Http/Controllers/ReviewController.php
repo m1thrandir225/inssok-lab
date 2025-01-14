@@ -26,7 +26,7 @@ class ReviewController extends Controller
         $status = $request->input('status');
 
         $reviews = Review::query()
-            ->when($status, fn (Builder $builder) => $builder->where('status', $status))
+            ->when($status, fn(Builder $builder) => $builder->where('status', $status))
             ->paginate();
 
         return ReviewResource::collection($reviews);

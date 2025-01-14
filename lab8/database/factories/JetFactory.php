@@ -34,7 +34,7 @@ class JetFactory extends Factory
      */
     public function luxury(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'model' => 'Gulfstream ' . fake()->bothify('G???'),
             'capacity' => fake()->numberBetween(12, 20),
             'hourly_rate' => fake()->numberBetween(15000, 30000),
@@ -46,7 +46,7 @@ class JetFactory extends Factory
      */
     public function small(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'model' => 'Citation ' . fake()->bothify('CJ#'),
             'capacity' => fake()->numberBetween(4, 8),
             'hourly_rate' => fake()->numberBetween(3000, 8000),

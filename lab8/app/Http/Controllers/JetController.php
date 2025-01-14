@@ -21,8 +21,8 @@ class JetController extends Controller
         $searchQuery = $request->input('search');
 
         $jets = Jet::query()
-            ->where('name', 'like', '%'.$searchQuery.'%')
-            ->orWhere('model', 'like', '%'.$searchQuery.'%')
+            ->where('name', 'like', '%' . $searchQuery . '%')
+            ->orWhere('model', 'like', '%' . $searchQuery . '%')
             ->paginate();
 
         return JetResource::collection($jets);
